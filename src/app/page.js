@@ -3,7 +3,7 @@
 import { useInfiniteQuery, QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 const getServerData = async (page) => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=20&_page=' + page)
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=27&_page=' + page)
   const characters = (await response.json())
   return characters;
 }
@@ -23,6 +23,18 @@ const MyComponent = ()=> {
       }
     }
   )
+
+  const loadMoreBtnText = ()=> {
+    if (isFetchingNextPage) {
+      return '⏳ Fetching posts'
+    }
+    let lastPage = data?.pages[data?.pages.length-1]
+    if(!lastPage?.length) {
+      return 'Nothing left to load'
+    }
+    return 'Load more'
+  }
+
   return <>
     <h1>📖 Post list</h1>
     <ol>
@@ -35,7 +47,7 @@ const MyComponent = ()=> {
     <button 
       onClick={() => fetchNextPage()}
       disabled={isFetchingNextPage}>
-        Load more
+        {loadMoreBtnText()}
     </button>
   </>
 }
