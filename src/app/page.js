@@ -2,10 +2,10 @@
 
 import { useInfiniteQuery, QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
-const getServerData = async (page) => {
+const fetchData = async (page) => {
   const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=27&_page=' + page)
-  const characters = (await response.json())
-  return characters;
+  const posts = (await response.json())
+  return posts;
 }
 
 const queryClient = new QueryClient();
@@ -14,7 +14,7 @@ const MyComponent = ()=> {
   const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
     ['query'], 
     async ({pageParam = 1}) => {
-      const response = await getServerData(pageParam)
+      const response = await fetchData(pageParam)
       return response
     }, 
     {
